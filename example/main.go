@@ -2,7 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/scalingdata/gowinlog"
+	"github.com/ofcoursedude/gowinlog"
+	"time"
 )
 
 func main() {
@@ -23,6 +24,10 @@ func main() {
 			fmt.Printf("Bookmark: %v\n", bookmark)
 		case err := <-watcher.Error():
 			fmt.Printf("Error: %v\n\n", err)
+		default:
+			// If no event is waiting, need to wait or do something else, otherwise
+			// the the app fails on deadlock.
+			<-time.After(1 * time.Millisecond)
 		}
 	}
 }
