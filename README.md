@@ -28,7 +28,7 @@ import (
 	"fmt"
 	"time"
 
-	winlog "github.com/pavelblossom/gowinlog"
+	winlog "github.com/ofcoursedude/gowinlog"
 )
 
 func main() {
