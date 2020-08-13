@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/ofcoursedude/gowinlog"
 	"time"
+
+	"github.com/ofcoursedude/gowinlog"
 )
 
 func main() {

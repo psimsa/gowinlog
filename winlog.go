@@ -12,12 +12,12 @@ func (self *WinLogWatcher) Event() <-chan *WinLogEvent {
 	return self.eventChan
 }
 
-// Channel for receiving errors (not "error" events)
+/*Channel for receiving errors (not "error" events)*/
 func (self *WinLogWatcher) Error() <-chan error {
 	return self.errChan
 }
 
-// Create a new watcher
+/* Create a new watcher */
 func NewWinLogWatcher() (*WinLogWatcher, error) {
 	cHandle, err := GetSystemRenderContext()
 	if err != nil {
@@ -106,6 +106,7 @@ func (self *WinLogWatcher) SubscribeFromBookmark(channel, query string, xmlStrin
 	return nil
 }
 
+/* Remove subscription from channel */
 func (self *WinLogWatcher) RemoveSubscription(channel string) error {
 	self.watchMutex.Lock()
 	defer self.watchMutex.Unlock()
@@ -127,17 +128,15 @@ func (self *WinLogWatcher) RemoveSubscription(channel string) error {
 // Remove all subscriptions from this watcher and shut down.
 func (self *WinLogWatcher) Shutdown() {
 	close(self.shutdown)
-	for channel, _ := range self.watches {
+	for channel := range self.watches {
 		self.RemoveSubscription(channel)
 	}
 	CloseEventHandle(uint64(self.renderContext))
 	close(self.errChan)
 	close(self.eventChan)
 }
-
+/* Publish the received error to the errChan, but discard if shutdown is in progress */
 func (self *WinLogWatcher) PublishError(err error) {
-	// Publish the received error to the errChan, but
-	// discard if shutdown is in progress
 	select {
 	case self.errChan <- err:
 	case <-self.shutdown:
@@ -250,6 +249,7 @@ func (self *WinLogWatcher) convertEvent(handle EventHandle, subscribedChannel st
 	return &event, nil
 }
 
+/* Publish a new event */
 func (self *WinLogWatcher) PublishEvent(handle EventHandle, subscribedChannel string) {
 
 	// Convert the event from the event log schema

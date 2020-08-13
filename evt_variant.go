@@ -125,7 +125,7 @@ func (e EvtVariant) FileTime(index uint32) (time.Time, error) {
 	if elem.Type != EvtVarTypeFileTime {
 		return time.Now(), fmt.Errorf("EvtVariant at index %v was not of type FileTime, type was %v", index, elem.Type)
 	}
-	var t *fileTime = (*fileTime)(unsafe.Pointer(&elem.Data))
+	var t = (*fileTime)(unsafe.Pointer(&elem.Data))
 	timeSecs := (((int64(t.highDateTime) << 32) | int64(t.lowDateTime)) / 10000000) - int64(11644473600)
 	timeNano := (((int64(t.highDateTime) << 32) | int64(t.lowDateTime)) % 10000000) * 100
 	return time.Unix(timeSecs, timeNano), nil
