@@ -6,6 +6,8 @@ import (
 	"syscall"
 )
 
+/*Bookmarks allow you to remember a specific event and restore subscription at that point of time*/
+
 /* Create a new, empty bookmark. Bookmark handles must be closed with CloseEventHandle. */
 func CreateBookmark() (BookmarkHandle, error) {
 	bookmark, err := EvtCreateBookmark(nil)

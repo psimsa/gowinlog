@@ -7,6 +7,8 @@ import (
 	"time"
 )
 
+/* WinLogWatcher encompasses the overall functionality, eventlog subscriptions etc. */
+
 // Channel for receiving events
 func (self *WinLogWatcher) Event() <-chan *WinLogEvent {
 	return self.eventChan
@@ -135,6 +137,7 @@ func (self *WinLogWatcher) Shutdown() {
 	close(self.errChan)
 	close(self.eventChan)
 }
+
 /* Publish the received error to the errChan, but discard if shutdown is in progress */
 func (self *WinLogWatcher) PublishError(err error) {
 	select {

@@ -7,6 +7,8 @@ import (
 	"unsafe"
 )
 
+/* Interop code for wevtapi.dll */
+
 var (
 	winevtDll                *syscall.DLL
 	evtCreateBookmark        *syscall.Proc

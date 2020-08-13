@@ -9,6 +9,8 @@ import (
 	"unsafe"
 )
 
+/*Functionality related to events and listening to the event log*/
+
 /* Get a handle to a render context which will render properties from the System element.
    Wraps EvtCreateRenderContext() with Flags = EvtRenderContextSystem. The resulting
    handle must be closed with CloseEventHandle. */
@@ -119,7 +121,7 @@ func RenderEventXML(eventHandle EventHandle) (string, error) {
 		return err.Error(), err
 	}
 
-	//Remove null bytes
+	// Remove null bytes
 	xml := bytes.Replace(buffer, []byte("\x00"), []byte{}, -1)
 
 	return string(xml), nil

@@ -7,7 +7,7 @@ import (
 
 // Stores the common fields from a log event
 type WinLogEvent struct {
-	//XML
+	// XML
 	Xml    string
 	XmlErr error
 
