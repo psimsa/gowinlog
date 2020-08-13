@@ -7,10 +7,12 @@ import (
 	"time"
 )
 
+// Channel for receiving events
 func (self *WinLogWatcher) Event() <-chan *WinLogEvent {
 	return self.eventChan
 }
 
+// Channel for receiving errors (not "error" events)
 func (self *WinLogWatcher) Error() <-chan error {
 	return self.errChan
 }
