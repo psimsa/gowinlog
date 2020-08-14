@@ -4,7 +4,7 @@ Go library for subscribing to the Windows Event Log.
 Godocs
 =======
 
-godoc is not proper, look at the example
+[![PkgGoDev](https://pkg.go.dev/badge/github.com/ofcoursedude/gowinlog)](https://pkg.go.dev/github.com/ofcoursedude/gowinlog)
 
 Installation
 =======
@@ -53,7 +53,7 @@ func main() {
 		default:
 			// If no event is waiting, need to wait or do something else, otherwise
 			// the the app fails on deadlock.
-			<-time.After(1 * time.Second)
+			<-time.After(1 * time.Millisecond)
 		}
 	}
 }
