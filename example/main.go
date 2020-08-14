@@ -1,10 +1,12 @@
+// +build windows
+
 package main
 
 import (
 	"fmt"
 	"time"
 
-	"github.com/ofcoursedude/gowinlog"
+	winlog "github.com/ofcoursedude/gowinlog"
 )
 
 func main() {

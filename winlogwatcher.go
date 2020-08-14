@@ -1,5 +1,6 @@
 // +build windows
 
+//Winlog hooks into the Windows Event Log and streams events through channels
 package winlog
 
 import (
@@ -9,17 +10,17 @@ import (
 
 /* WinLogWatcher encompasses the overall functionality, eventlog subscriptions etc. */
 
-// Channel for receiving events
-func (self *WinLogWatcher) Event() <-chan *WinLogEvent {
-	return self.eventChan
+// Event Channel for receiving events
+func (wlw *WinLogWatcher) Event() <-chan *WinLogEvent {
+	return wlw.eventChan
 }
 
-/*Channel for receiving errors (not "error" events)*/
-func (self *WinLogWatcher) Error() <-chan error {
-	return self.errChan
+// Channel for receiving errors (not "error" events)
+func (wlw *WinLogWatcher) Error() <-chan error {
+	return wlw.errChan
 }
 
-/* Create a new watcher */
+// NewWinLogWatcher creates a new watcher
 func NewWinLogWatcher() (*WinLogWatcher, error) {
 	cHandle, err := GetSystemRenderContext()
 	if err != nil {
