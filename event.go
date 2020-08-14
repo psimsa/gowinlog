@@ -187,3 +187,33 @@ func eventCallback(Action uint32, Context unsafe.Pointer, handle syscall.Handle)
 	}
 	return 0
 }
+
+func (ev WinLogEvent) AsMap() map[string]interface{} {
+	toReturn := make(map[string]interface{})
+	toReturn["Xml"] = ev.Xml
+	toReturn["ProviderName"] = ev.ProviderName
+	toReturn["EventId"] = ev.EventId
+	toReturn["Qualifiers"] = ev.Qualifiers
+	toReturn["Level"] = ev.Level
+	toReturn["Task"] = ev.Task
+	toReturn["Opcode"] = ev.Opcode
+	toReturn["Created"] = ev.Created
+	toReturn["RecordId"] = ev.RecordId
+	toReturn["ProcessId"] = ev.ProcessId
+	toReturn["ThreadId"] = ev.ThreadId
+	toReturn["Channel"] = ev.Channel
+	toReturn["ComputerName"] = ev.ComputerName
+	toReturn["Version"] = ev.Version
+	toReturn["Msg"] = ev.Msg
+	toReturn["LevelText"] = ev.LevelText
+	toReturn["TaskText"] = ev.TaskText
+	toReturn["OpcodeText"] = ev.OpcodeText
+	toReturn["Keywords"] = ev.Keywords
+	toReturn["ChannelText"] = ev.ChannelText
+	toReturn["ProviderText"] = ev.ProviderText
+	toReturn["IdText"] = ev.IdText
+	toReturn["Bookmark"] = ev.Bookmark
+	toReturn["SubscribedChannel"] = ev.SubscribedChannel
+	toReturn["Bookmark"] = ev.Bookmark
+	return toReturn
+}
