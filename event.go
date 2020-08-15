@@ -13,7 +13,7 @@ import (
 
 /* Get a handle to a render context which will render properties from the System element.
    Wraps EvtCreateRenderContext() with Flags = EvtRenderContextSystem. The resulting
-   handle must be closed with CloseEventHandle. */
+   handle must be closed with CloseEventHandle. *//
 func GetSystemRenderContext() (SysRenderContext, error) {
 	context, err := EvtCreateRenderContext(0, 0, EvtRenderContextSystem)
 	if err != nil {
@@ -188,7 +188,8 @@ func eventCallback(Action uint32, Context unsafe.Pointer, handle syscall.Handle)
 	return 0
 }
 
-func (ev WinLogEvent) AsMap() map[string]interface{} {
+// CreateMap converts the WinLogEvent to a map[string]interface{}
+func (ev *WinLogEvent) CreateMap() map[string]interface{} {
 	toReturn := make(map[string]interface{})
 	toReturn["Xml"] = ev.Xml
 	toReturn["ProviderName"] = ev.ProviderName
