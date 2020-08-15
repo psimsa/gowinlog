@@ -11,9 +11,9 @@ import (
 
 /*Functionality related to events and listening to the event log*/
 
-/* Get a handle to a render context which will render properties from the System element.
-   Wraps EvtCreateRenderContext() with Flags = EvtRenderContextSystem. The resulting
-   handle must be closed with CloseEventHandle. *//
+// Get a handle to a render context which will render properties from the System element.
+//    Wraps EvtCreateRenderContext() with Flags = EvtRenderContextSystem. The resulting
+//    handle must be closed with CloseEventHandle.
 func GetSystemRenderContext() (SysRenderContext, error) {
 	context, err := EvtCreateRenderContext(0, 0, EvtRenderContextSystem)
 	if err != nil {
