@@ -1,0 +1,36 @@
+name: Go
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    env:
+      GOOS: windows
+      GOARCH: amd64
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.17
+
+    - name: Build library
+      run:  go build -v .
+      
+    - name: Build gowinlog
+      run:  go build -v -o artifacts/gowinlog.exe ./example/ 
+      
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: gowinlog.exe
+        path: artifacts/gowinlog.exe
+        retention-days: 5
