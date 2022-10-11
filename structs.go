@@ -1,3 +1,4 @@
+//go:build windows
 // +build windows
 
 package winlog
@@ -64,7 +65,7 @@ type WinLogWatcher struct {
 
 	renderContext SysRenderContext
 	watches       map[string]*channelWatcher
-	watchMutex    sync.Mutex
+	watchMutex    sync.RWMutex
 	shutdown      chan interface{}
 
 	// Optionally render localized fields. EvtFormatMessage() is slow, so

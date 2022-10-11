@@ -1,3 +1,4 @@
+//go:build windows
 // +build windows
 
 //Winlog hooks into the Windows Event Log and streams events through channels
@@ -109,31 +110,33 @@ func (self *WinLogWatcher) SubscribeFromBookmark(channel, query string, xmlStrin
 	return nil
 }
 
-/* Remove subscription from channel */
-func (self *WinLogWatcher) RemoveSubscription(channel string) error {
+/* Remove all subscriptions from all watchers */
+func (self *WinLogWatcher) removeSubscriptions() {
+	self.watchMutex.RLock()
+	defer self.watchMutex.RUnlock()
+
+	for channel := range self.watches {
+		if watch, ok := self.watches[channel]; ok {
+			_ = CancelEventHandle(uint64(watch.subscription))
+			_ = CloseEventHandle(uint64(watch.subscription))
+			CloseEventHandle(uint64(watch.bookmark))
+		}
+	}
+}
+
+/* Remove all watchers */
+func (self *WinLogWatcher) removeWatchers() {
 	self.watchMutex.Lock()
 	defer self.watchMutex.Unlock()
 
-	var cancelErr, closeErr error
-	if watch, ok := self.watches[channel]; ok {
-		cancelErr = CancelEventHandle(uint64(watch.subscription))
-		closeErr = CloseEventHandle(uint64(watch.subscription))
-		CloseEventHandle(uint64(watch.bookmark))
-	}
-
-	delete(self.watches, channel)
-	if cancelErr != nil {
-		return cancelErr
-	}
-	return closeErr
+	self.watches = make(map[string]*channelWatcher)
 }
 
 // Remove all subscriptions from this watcher and shut down.
 func (self *WinLogWatcher) Shutdown() {
 	close(self.shutdown)
-	for channel := range self.watches {
-		self.RemoveSubscription(channel)
-	}
+	self.removeSubscriptions()
+	self.removeWatchers()
 	CloseEventHandle(uint64(self.renderContext))
 	close(self.errChan)
 	close(self.eventChan)
@@ -264,9 +267,9 @@ func (self *WinLogWatcher) PublishEvent(handle EventHandle, subscribedChannel st
 	}
 
 	// Get the bookmark for the channel
-	self.watchMutex.Lock()
+	self.watchMutex.RLock()
 	watch, ok := self.watches[subscribedChannel]
-	self.watchMutex.Unlock()
+	self.watchMutex.RUnlock()
 	if !ok {
 		self.errChan <- fmt.Errorf("No handle for channel bookmark %q", subscribedChannel)
 		return
