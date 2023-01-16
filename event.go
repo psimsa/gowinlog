@@ -1,3 +1,4 @@
+//go:build windows
 // +build windows
 
 package winlog
@@ -71,6 +72,11 @@ func FormatMessage(eventPublisherHandle PublisherHandle, eventHandle EventHandle
 			return "", err
 		}
 	}
+
+	if size == 0 {
+		return "empty event message", nil
+	}
+
 	buf := make([]uint16, size)
 	err = EvtFormatMessage(syscall.Handle(eventPublisherHandle), syscall.Handle(eventHandle), 0, 0, nil, uint32(format), uint32(len(buf)), &buf[0], &size)
 	if err != nil {
@@ -171,10 +177,10 @@ func getTestEventHandle() (EventHandle, error) {
 	var recordsReturned uint32
 	err = EvtNext(handle, 1, &record, 500, 0, &recordsReturned)
 	if err != nil {
-		EvtClose(handle)
+		_ = EvtClose(handle)
 		return 0, nil
 	}
-	EvtClose(handle)
+	_ = EvtClose(handle)
 	return EventHandle(record), nil
 }
 
